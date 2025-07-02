@@ -1,0 +1,619 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.login-main-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 32px;
+}
+@media (min-width: 700px) {
+    .login-main-wrapper {
+        flex-direction: row;
+        gap: 48px;
+    }
+}
+
+.login-container {
+    background: rgba(255,255,255,0.98);
+    max-width: 380px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 36px 32px 36px;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18), 0 1.5px 8px 0 rgba(99,102,241,0.07);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e0e7ff;
+}
+.login-container:before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    width: 180px;
+    height: 180px;
+    background: linear-gradient(135deg, #6366f1 0%, #60a5fa 100%);
+    opacity: 0.12;
+    border-radius: 50%;
+    z-index: 0;
+}
+.login-container h2 {
+    color: #3730a3;
+    margin-bottom: 24px;
+    font-size: 2.1em;
+    letter-spacing: 1px;
+    z-index: 1;
+    position: relative;
+}
+.login-container form {
+    z-index: 1;
+    position: relative;
+}
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 92%;
+    padding: 12px 14px;
+    margin: 12px 0 18px 0;
+    border: 1px solid #c7d2fe;
+    border-radius: 6px;
+    background: #f1f5f9;
+    font-size: 1em;
+    transition: border 0.2s;
+    outline: none;
+}
+.login-container input[type="text"]:focus,
+.login-container input[type="password"]:focus {
+    border: 1.5px solid #6366f1;
+    background: #fff;
+}
+.login-container button, .login-btn {
+    background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+    transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+    margin-top: 8px;
+    display: inline-block;
+    text-decoration: none;
+    margin-bottom: 10px;
+    opacity: 1;
+}
+.login-container button:disabled, .login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.login-container button:hover:not(:disabled), .login-btn:hover:not(:disabled) {
+    background: linear-gradient(90deg, #4338ca 0%, #2563eb 100%);
+    box-shadow: 0 4px 16px rgba(99,102,241,0.13);
+}
+.login-container .error {
+    color: #d32f2f;
+    margin-top: 16px;
+    background: #fee2e2;
+    border-radius: 4px;
+    padding: 8px 0;
+    font-size: 0.98em;
+}
+
+/* For admin and staff login distinction */
+.staff-login {
+    border-left: 6px solid #6366f1;
+}
+.admin-login {
+    border-left: 6px solid #f59e42;
+}
+.admin-login h2 {
+    color: #b45309;
+}
+
+/* General dashboard and navigation improvements */
+.dashboard {
+    background: rgba(255,255,255,0.98);
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 36px 48px 32px 48px;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+    text-align: center;
+    border: 1px solid #e0e7ff;
+}
+.dashboard h1, .dashboard h2 {
+    color: #3730a3;
+    margin-bottom: 18px;
+    font-size: 2em;
+    letter-spacing: 1px;
+}
+nav {
+    margin: 24px 0 28px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+nav a {
+    color: #6366f1;
+    background: #f1f5f9;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    font-size: 1em;
+    box-shadow: 0 1px 4px rgba(99,102,241,0.04);
+}
+nav a:hover {
+    background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+    color: #fff;
+}
+
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+    background: #f4f8fb;
+}
+.sidebar {
+    width: 220px;
+    background: linear-gradient(135deg, #1e293b 0%, #2563eb 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    box-shadow: 2px 0 12px rgba(44, 62, 80, 0.06);
+    position: relative;
+    z-index: 2;
+}
+.sidebar-header {
+    padding: 32px 0 18px 0;
+    text-align: center;
+    font-size: 1.6em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #fff;
+    letter-spacing: 2px;
+}
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    margin-top: 18px;
+}
+.sidebar-link {
+    color: #e2e8f0;
+    text-shadow: none;
+    text-decoration: none;
+    padding: 14px 32px;
+    font-size: 1.12em;
+    font-weight: 600;
+    border-left: 4px solid transparent;
+    transition: background 0.18s, color 0.18s, border 0.18s;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+    background: transparent;
+}
+.sidebar-link:hover {
+    background: #334155;
+    color: #fff;
+    border-left: 4px solid #38bdf8;
+}
+.sidebar-link.active {
+    background: #fff;
+    color: #1e293b;
+    border-left: 4px solid #2563eb;
+    font-weight: bold;
+    text-shadow: none;
+}
+.dashboard-content {
+    flex: 1;
+    padding: 48px 40px 32px 40px;
+    background: #f4f8fb;
+    min-height: 100vh;
+}
+.dashboard-content h1 {
+    color: #2563eb;
+    font-size: 2.2em;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+.dashboard-desc {
+    color: #64748b;
+    font-size: 1.15em;
+    margin-bottom: 18px;
+}
+
+/* --- Enhanced Form and Table Styles for All Modules --- */
+.dashboard-content form,
+.dashboard-content .room-form,
+.dashboard-content .room-search {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    align-items: center;
+    margin-bottom: 22px;
+    background: #f1f5f9;
+    padding: 18px 18px 10px 18px;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(44,62,80,0.06);
+}
+.dashboard-content input[type="text"],
+.dashboard-content input[type="email"],
+.dashboard-content input[type="number"],
+.dashboard-content input[type="date"],
+.dashboard-content input[type="datetime-local"],
+.dashboard-content select {
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1.5px solid #c7d2fe;
+    background: #f8fafc;
+    font-size: 1.08em;
+    color: #1e293b;
+    margin-bottom: 0;
+    min-width: 210px;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-shadow: 0 1px 4px rgba(99,102,241,0.04);
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    /* Remove default calendar icon and add custom style */
+    background-image: linear-gradient(90deg, #e0e7ff 0%, #f8fafc 100%);
+    box-shadow: 0 2px 8px rgba(99,102,241,0.07);
+}
+.dashboard-content input[type="date"]::-webkit-calendar-picker-indicator,
+.dashboard-content input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(38%) sepia(92%) saturate(747%) hue-rotate(202deg) brightness(95%) contrast(92%);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.dashboard-content input[type="date"]:focus,
+.dashboard-content input[type="datetime-local"]:focus {
+    border: 1.5px solid #2563eb;
+    box-shadow: 0 0 0 2px #93c5fd44;
+    background: #f0f9ff;
+}
+.dashboard-content input[type="date"]::-webkit-input-placeholder,
+.dashboard-content input[type="datetime-local"]::-webkit-input-placeholder {
+    color: #64748b;
+    opacity: 1;
+}
+.dashboard-content input[type="date"]::-moz-placeholder,
+.dashboard-content input[type="datetime-local"]::-moz-placeholder {
+    color: #64748b;
+    opacity: 1;
+}
+.dashboard-content input[type="date"]:-ms-input-placeholder,
+.dashboard-content input[type="datetime-local"]:-ms-input-placeholder {
+    color: #64748b;
+    opacity: 1;
+}
+.dashboard-content input[type="date"]::placeholder,
+.dashboard-content input[type="datetime-local"]::placeholder {
+    color: #64748b;
+    opacity: 1;
+}
+/* Add a calendar icon overlay for a modern look */
+.dashboard-content .calendar-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.dashboard-content .calendar-group label {
+    margin-bottom: 4px;
+    color: #2563eb;
+    font-weight: 500;
+    font-size: 1em;
+}
+.dashboard-content .calendar-group .calendar-icon {
+    position: absolute;
+    right: 16px;
+    top: 38px;
+    pointer-events: none;
+    font-size: 1.3em;
+    color: #2563eb99;
+}
+.dashboard-content button,
+.dashboard-content input[type="submit"] {
+    background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.08em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+    transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+    margin-top: 0;
+    margin-bottom: 0;
+    opacity: 1;
+}
+.dashboard-content button:hover,
+.dashboard-content input[type="submit"]:hover {
+    background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+    box-shadow: 0 4px 16px rgba(99,102,241,0.13);
+}
+
+.dashboard-content table {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 24px;
+    font-size: 1.08em;
+}
+.dashboard-content th, .dashboard-content td {
+    text-align: center;
+    padding: 14px 10px;
+    border-bottom: 1px solid #e0e7ef;
+}
+.dashboard-content th {
+    background: #2563eb;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.08em;
+    letter-spacing: 0.5px;
+}
+.dashboard-content tr:nth-child(even) td {
+    background: #f1f5f9;
+}
+.dashboard-content tr:hover td {
+    background: #e0e7ff;
+}
+.dashboard-content td {
+    color: #1e293b;
+}
+
+/* Make action links and buttons stand out */
+.dashboard-content a,
+.dashboard-content .action-link {
+    color: #2563eb;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+.dashboard-content a:hover,
+.dashboard-content .action-link:hover {
+    color: #0ea5e9;
+    text-decoration: underline;
+}
+
+/* Staff Signup Form Styles (consistent with dashboard forms) */
+.signup-container {
+    background: #fff;
+    max-width: 420px;
+    margin: 60px auto 0 auto;
+    padding: 38px 36px 32px 36px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+    border: 1px solid #e0e7ff;
+    text-align: center;
+}
+.signup-container h2 {
+    color: #2563eb;
+    margin-bottom: 10px;
+    font-size: 2em;
+    font-weight: 700;
+}
+.signup-container p {
+    margin-bottom: 18px;
+    color: #64748b;
+    font-size: 1.08em;
+}
+.signup-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+    margin-bottom: 10px;
+}
+.signup-container input[type="text"],
+.signup-container input[type="password"],
+.signup-container input[type="email"],
+.signup-container select {
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1.5px solid #c7d2fe;
+    background: #f8fafc;
+    font-size: 1.08em;
+    color: #1e293b;
+    margin-bottom: 0;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-shadow: 0 1px 4px rgba(99,102,241,0.04);
+}
+.signup-container input[type="text"]:focus,
+.signup-container input[type="password"]:focus,
+.signup-container input[type="email"]:focus,
+.signup-container select:focus {
+    border: 1.5px solid #2563eb;
+    box-shadow: 0 0 0 2px #93c5fd44;
+    background: #f0f9ff;
+}
+.signup-container input::placeholder {
+    color: #64748b;
+    opacity: 1;
+}
+.signup-container button {
+    background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.08em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+    transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+    margin-top: 8px;
+    margin-bottom: 0;
+    opacity: 1;
+}
+.signup-container button:hover {
+    background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+    box-shadow: 0 4px 16px rgba(99,102,241,0.13);
+}
+.signup-container .error {
+    color: #d32f2f;
+    background: #fee2e2;
+    border-radius: 4px;
+    padding: 8px 0;
+    font-size: 0.98em;
+    margin: 10px 0 0 0;
+}
+.signup-container .success {
+    color: #15803d;
+    background: #bbf7d0;
+    border-radius: 4px;
+    padding: 8px 0;
+    font-size: 0.98em;
+    margin: 10px 0 0 0;
+}
+.signup-container a {
+    color: #2563eb;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.2s;
+    display: inline-block;
+    margin-top: 18px;
+}
+.signup-container a:hover {
+    color: #0ea5e9;
+}
+
+/* Add New Staff button on staff management page */
+.dashboard-content .login-btn[href="staff_signup.php"] {
+    display: inline-block;
+    background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 6px;
+    font-size: 1.08em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+    margin-top: 18px;
+    margin-bottom: 0;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.dashboard-content .login-btn[href="staff_signup.php"]:hover {
+    background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.13);
+}
+
+/* Improved style for database backup download button in reports */
+.dashboard-content .login-btn[href*="backup"] {
+    display: inline-block;
+    background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+    color: #fff !important;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-size: 1.08em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(16,185,129,0.13);
+    margin-top: 24px;
+    margin-bottom: 0;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.dashboard-content .login-btn[href*="backup"]:hover {
+    background: linear-gradient(90deg, #047857 0%, #059669 100%);
+    color: #fff !important;
+    box-shadow: 0 4px 16px rgba(16,185,129,0.18);
+}
+
+/* Make Export to CSV button in bookings very bright and prominent */
+.dashboard-content .login-btn[href*="export=csv"] {
+    display: inline-block;
+    background: linear-gradient(90deg, #f59e42 0%, #fbbf24 100%);
+    color: #222 !important;
+    border: 2px solid #fbbf24;
+    padding: 14px 36px;
+    border-radius: 8px;
+    font-size: 1.15em;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(251,191,36,0.18);
+    margin-left: 18px;
+    margin-bottom: 0;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s, border 0.2s;
+}
+.dashboard-content .login-btn[href*="export=csv"]:hover {
+    background: linear-gradient(90deg, #fbbf24 0%, #f59e42 100%);
+    color: #111 !important;
+    border: 2px solid #f59e42;
+    box-shadow: 0 6px 24px rgba(251,191,36,0.28);
+}
+
+.add-staff-btn .plus-icon {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    margin-right: 10px;
+    vertical-align: middle;
+    display: inline-block;
+    text-shadow: 0 2px 8px #2563eb44;
+}
+
+/* Toast notification styles */
+.toast {
+    position: fixed;
+    top: 32px;
+    right: 32px;
+    min-width: 220px;
+    background: #2563eb;
+    color: #fff;
+    padding: 16px 28px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(30,41,59,0.13);
+    font-size: 1.08em;
+    font-weight: 600;
+    z-index: 99999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s, top 0.4s;
+}
+.toast.show {
+    opacity: 1;
+    pointer-events: auto;
+    top: 48px;
+}
+.toast.toast-error {
+    background: #d32f2f;
+}
+.toast.toast-success {
+    background: #15803d;
+}
+
+@media (max-width: 600px) {
+    .signup-container {
+        padding: 18px 4vw 16px 4vw;
+    }
+    .signup-container h2 {
+        font-size: 1.3em;
+    }
+}
