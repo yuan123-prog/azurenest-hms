@@ -13,6 +13,7 @@ if ($role === 'Manager') {
         'staff.php' => 'Staff',
         'reports.php' => 'Reports',
         'revenue.php' => 'Revenue',
+        'payments.php' => 'Payments',
         'communication.php' => 'Communication',
         'tasks.php' => 'Tasks',
         'profile.php' => 'My Profile',

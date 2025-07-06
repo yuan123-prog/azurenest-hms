@@ -6,10 +6,10 @@ include "includes/sidebar.php";
 
 // Get user role
 $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'Guest';
+// Set timezone to your local timezone (e.g., Asia/Manila) BEFORE getting date/time
+date_default_timezone_set('Asia/Manila');
 // Get current date/time
 $date = date('F j, Y');
-// Set timezone to your local timezone (e.g., Asia/Manila)
-date_default_timezone_set('Asia/Manila');
 $time = date('h:i A');
 
 // Room status summary
@@ -154,6 +154,8 @@ $low_inventory = $low_inventory ? $low_inventory->fetch_assoc()['cnt'] : 0;
                 Profiles</a>
             <a href="reports.php" class="widget-card"
                 style="text-align:center;padding:18px 0;background:#e0e7ef;border-radius:8px;text-decoration:none;color:#222;font-weight:600;">Reports</a>
+            <a href="payments.php" class="widget-card"
+                style="text-align:center;padding:18px 0;background:#e0e7ef;border-radius:8px;text-decoration:none;color:#222;font-weight:600;">Payments</a>
             <a href="communication.php" class="widget-card"
                 style="text-align:center;padding:18px 0;background:#e0e7ef;border-radius:8px;text-decoration:none;color:#222;font-weight:600;">Communication
                 Center</a>

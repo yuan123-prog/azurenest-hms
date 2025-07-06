@@ -118,12 +118,11 @@ if ($role !== 'Manager') {
                     <th>Guest Name</th>
                     <th>Amount</th>
                     <th>Date</th>
-                    <th>Method</th>
                     <th>Status</th>
                 </tr>
                 <?php
                 $total_payments = 0;
-                $payments = $conn->query("SELECT p.payment_id, p.booking_id, g.name AS guest_name, p.amount, p.payment_date, p.method, p.status FROM Payments p LEFT JOIN Bookings b ON p.booking_id = b.booking_id LEFT JOIN Guest g ON b.guest_id = g.guest_id WHERE p.status='Completed' ORDER BY p.payment_date DESC, p.payment_id DESC");
+                $payments = $conn->query("SELECT p.payment_id, p.booking_id, g.name AS guest_name, p.amount, p.payment_date, p.status FROM Payments p LEFT JOIN Bookings b ON p.booking_id = b.booking_id LEFT JOIN Guest g ON b.guest_id = g.guest_id WHERE p.status='Completed' ORDER BY p.payment_date DESC, p.payment_id DESC");
                 while ($row = $payments->fetch_assoc()):
                     $total_payments += $row['amount']; ?>
                     <tr>
@@ -132,7 +131,6 @@ if ($role !== 'Manager') {
                         <td><?= htmlspecialchars($row['guest_name']) ?></td>
                         <td>₱<?= number_format($row['amount'], 2) ?></td>
                         <td><?= $row['payment_date'] ?></td>
-                        <td><?= htmlspecialchars($row['method']) ?></td>
                         <td><?= htmlspecialchars($row['status']) ?></td>
                     </tr>
                 <?php endwhile; ?>

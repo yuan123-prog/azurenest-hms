@@ -117,7 +117,7 @@ include "includes/sidebar.php";
     <?php if ($can_edit): ?>
         <form method="post" style="margin-bottom:20px;">
             <input type="text" name="name" placeholder="Full Name" required>
-            <input type="text" name="contact" placeholder="Contact" required>
+            <input type="text" name="contact" placeholder="Contact" required pattern="[0-9]+" title="Contact number must contain digits only">
             <input type="email" name="email" placeholder="Email" required>
             <input type="text" name="preferences" placeholder="Preferences">
             <button type="submit" name="add_guest">Add Guest</button>
@@ -140,7 +140,7 @@ include "includes/sidebar.php";
                         <td><?= $guest['guest_id'] ?><input type="hidden" name="guest_id" value="<?= $guest['guest_id'] ?>">
                         </td>
                         <td><input type="text" name="name" value="<?= htmlspecialchars($guest['name']) ?>" required></td>
-                        <td><input type="text" name="contact" value="<?= htmlspecialchars($guest['contact']) ?>" required></td>
+                        <td><input type="text" name="contact" value="<?= htmlspecialchars($guest['contact']) ?>" required pattern="[0-9]+" title="Contact number must contain digits only"></td>
                         <td><input type="email" name="email" value="<?= htmlspecialchars($guest['email']) ?>" required></td>
                         <td><input type="text" name="preferences" value="<?= htmlspecialchars($guest['preferences']) ?>"></td>
                         <td>

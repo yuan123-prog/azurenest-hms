@@ -41,11 +41,27 @@ if (($is_admin || $role === 'Receptionist') && isset($_POST['add_booking'])) {
     if ($room_res && $room_row = $room_res->fetch_assoc()) {
         $room_price = floatval($room_row['price']);
     }
-    // Insert payment record
-    $pay_stmt = $conn->prepare("INSERT INTO Payments (booking_id, amount, status, payment_date) VALUES (?, ?, 'Completed', NOW())");
-    $pay_stmt->bind_param("id", $booking_id, $room_price);
-    $pay_stmt->execute();
-    $pay_stmt->close();
+    if ($room_price > 0) {
+        // Set payment status based on booking status
+        $payment_status = 'Pending';
+        if ($status === 'Checked-in' || $status === 'Checked-out' || $status === 'Reserved') {
+            $payment_status = 'Completed';
+        } elseif ($status === 'Cancelled') {
+            $payment_status = 'Cancelled';
+        }
+        $pay_stmt = $conn->prepare("INSERT INTO Payments (booking_id, amount, status, payment_date) VALUES (?, ?, ?, NOW())");
+        $pay_stmt->bind_param("ids", $booking_id, $room_price, $payment_status);
+        $pay_stmt->execute();
+        $pay_stmt->close();
+    } else {
+        // Log to audit if price is zero or missing
+        $staff_id = $_SESSION['staff_id'];
+        $details = "Booking added with NO PAYMENT: guest_id=$guest_id, room_id=$room_id, check_in=$check_in_dt, check_out=$check_out_dt, status=$status, room_price=$room_price";
+        $log = $conn->prepare("INSERT INTO Audit_Log (staff_id, action, details) VALUES (?, 'add_booking_no_payment', ?)");
+        $log->bind_param("is", $staff_id, $details);
+        $log->execute();
+        $log->close();
+    }
     // Audit log
     $staff_id = $_SESSION['staff_id'];
     $details = "Booking added: guest_id=$guest_id, room_id=$room_id, check_in=$check_in_dt, check_out=$check_out_dt, status=$status";
@@ -59,6 +75,10 @@ if (($is_admin || $role === 'Receptionist') && isset($_POST['add_booking'])) {
 // Handle delete booking
 if (($is_admin || $role === 'Receptionist') && isset($_GET['delete'])) {
     $booking_id = intval($_GET['delete']);
+    // Get room_id and status before deleting
+    $booking = $conn->query("SELECT room_id, status FROM Bookings WHERE booking_id=$booking_id")->fetch_assoc();
+    $room_id = $booking ? $booking['room_id'] : null;
+    $status = $booking ? $booking['status'] : null;
     // Audit log before delete
     $staff_id = $_SESSION['staff_id'];
     $details = "Booking deleted: booking_id=$booking_id";
@@ -66,7 +86,20 @@ if (($is_admin || $role === 'Receptionist') && isset($_GET['delete'])) {
     $log->bind_param("is", $staff_id, $details);
     $log->execute();
     $log->close();
+    // Delete related service usage records
+    $conn->query("DELETE FROM service_usage WHERE booking_id=$booking_id");
+    // Delete related payments
+    $conn->query("DELETE FROM Payments WHERE booking_id=$booking_id");
+    // Delete the booking
     $conn->query("DELETE FROM Bookings WHERE booking_id=$booking_id");
+    // Update room status if needed
+    if ($room_id) {
+        // Only set to Available if no other checked-in bookings for this room
+        $active = $conn->query("SELECT COUNT(*) as cnt FROM Bookings WHERE room_id=" . intval($room_id) . " AND status='Checked-in'")->fetch_assoc()['cnt'];
+        if ($active == 0) {
+            $conn->query("UPDATE Rooms SET status='Available' WHERE room_id=" . intval($room_id));
+        }
+    }
     header("Location: bookings.php?success=Booking+deleted");
     exit();
 }
@@ -89,6 +122,16 @@ if (($is_admin || $role === 'Receptionist') && isset($_POST['edit_booking'])) {
     $stmt->bind_param("iisssi", $guest_id, $room_id, $check_in_dt, $check_out_dt, $status, $booking_id);
     $stmt->execute();
     $stmt->close();
+    // Update payment status if payment exists
+    $pay_status = null;
+    if ($status === 'Checked-in' || $status === 'Checked-out' || $status === 'Reserved') {
+        $pay_status = 'Completed';
+    } elseif ($status === 'Cancelled') {
+        $pay_status = 'Cancelled';
+    }
+    if ($pay_status) {
+        $conn->query("UPDATE Payments SET status='" . $conn->real_escape_string($pay_status) . "' WHERE booking_id=" . intval($booking_id));
+    }
     // If room changed, check previous room
     if ($prev_room_id != $room_id) {
         // Only set to Available if no other checked-in bookings for previous room

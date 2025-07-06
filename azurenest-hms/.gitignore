@@ -1,0 +1,4 @@
+private/db_connect.php
+*.sql
+.vscode/
+node_modules/
